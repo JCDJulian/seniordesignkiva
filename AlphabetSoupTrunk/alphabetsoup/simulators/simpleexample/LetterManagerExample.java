@@ -51,13 +51,11 @@ public class LetterManagerExample implements Updateable {
 			}
 			
 			//don't add a letter that's already been added
-			if(has_been_added)
-				continue;
+			if(has_been_added) continue;
 			
 			requiredLetters.add(l.clone());
 			int bundle_size = SimulationWorld.getSimulationWorld().letterStations[0].getBundleSize();
-			for(int i = 1; i < bundle_size; i++)
-				surplusLetters.add(l.clone());
+			for(int i = 1; i < bundle_size; i++) surplusLetters.add(l.clone());
 		}
 	}
 
