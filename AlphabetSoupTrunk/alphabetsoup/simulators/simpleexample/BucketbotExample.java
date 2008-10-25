@@ -19,8 +19,8 @@ public class BucketbotExample extends BucketbotBase {
 	int stuckCount = 0;			//number of updates not able to move at all
 	static final double sqrt2 = Math.sqrt(2.0);
 	
-	public BucketbotExample(float bucketbot_radius, float bucket_pickup_setdown_time,
-			float bucketbot_max_acceleration, float bucketbot_max_velocity, float collision_penalty_time) {
+	public BucketbotExample(float bucketbot_radius, float bucket_pickup_setdown_time, float bucketbot_max_acceleration, float bucketbot_max_velocity, float collision_penalty_time) 
+	{
 		super(bucketbot_radius, bucket_pickup_setdown_time, bucketbot_max_acceleration, bucketbot_max_velocity, collision_penalty_time);
 	}
 	
@@ -28,7 +28,8 @@ public class BucketbotExample extends BucketbotBase {
 	 * @see alphabetsoup.framework.Bucketbot#assignTask(alphabetsoup.base.BucketbotTask)
 	 */
 	//public void assignTask(Object tt) {
-	public <T> void assignTask(T tt) {
+	public <T> void assignTask(T tt) 
+	{
 		BucketbotTask t = (BucketbotTask)tt;
 		setCurrentTask(t);
 		stateQueue.clear();
@@ -102,11 +103,11 @@ public class BucketbotExample extends BucketbotBase {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Bucketbot#idle()
 	 */
-	public void idle() {
+	public void idle() 
+	{
 		SimulationWorldSimpleExample.getSimulationWorld().bucketbotManager.taskComplete(this, getCurrentTask());
 		SimulationWorldSimpleExample.getSimulationWorld().bucketbotManager.requestNewTask(this);
-		if(stateQueue.size() > 0)
-			stateQueue.get(0).act(this);
+		if(stateQueue.size() > 0) stateQueue.get(0).act(this);
 	}
 
 	public class BucketbotPickupBucket implements BucketbotState {
