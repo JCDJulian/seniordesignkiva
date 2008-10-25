@@ -7,15 +7,16 @@ import java.io.FileInputStream;
 import java.lang.reflect.*;
 import java.util.*;
 
-/**SimulationWorld is the base class of the AlphabetSoup simulation itself.
+/**
+ * SimulationWorld is the base class of the AlphabetSoup simulation itself.
  * This class should be extended to load and initialize all of the entities within
  * AlphabetSoup.  SimulationWorld contains these entities and updates them all accordingly
  * to advance the simulation forward in time.
  * @author Chris Hazard
  */
+
 public class SimulationWorld 
 {
-	
 	/**
 	 * BELOW VARIABLE WILL BE USED IN 
 	 */
@@ -92,15 +93,19 @@ public class SimulationWorld
 		
 		int num_bucketbots = Integer.parseInt(params.getProperty("num_bucketbots"));
 		bucketbots = new Bucketbot[num_bucketbots];
+		System.out.println("Number of bucket bots " + num_bucketbots);
 		
 		int num_buckets = Integer.parseInt(params.getProperty("num_buckets"));
 		buckets = new Bucket[num_buckets];
+		System.out.println("Number of buckets " + num_buckets);
 		
 		int num_word_stations = Integer.parseInt(params.getProperty("num_word_stations"));
 		wordStations = new WordStation[num_word_stations];
+		System.out.println("Number of words/picking stations " + num_word_stations);
 		
 		int num_letter_stations = Integer.parseInt(params.getProperty("num_letter_stations"));
 		letterStations = new LetterStation[num_letter_stations];
+		System.out.println("Number of letter/replenishment stations " + num_letter_stations);
 		
 		//get letter colors
 		// LETTER COLOR GOT FROM THE FILES
@@ -121,12 +126,14 @@ public class SimulationWorld
 		}		
 	}
 
-	/**Load a class with a constructor with any signature, as specified by parameters
+	/**
+	 * Load a class with a constructor with any signature, as specified by parameters
 	 * java's reflection api SHOULD have this function, but it doesn't...
 	 * @param class_name name of the class to load
 	 * @param params parameter list as used by class's desired constructor
 	 * @return new object as specified
 	 */
+	
 	public static Object createClass(String class_name, Object ... params) 
 	{
 		try
