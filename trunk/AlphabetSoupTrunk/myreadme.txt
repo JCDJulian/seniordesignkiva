@@ -13,3 +13,9 @@ instead of word stations.
 - Bucket is SKU stands
 - Pickers is words stations
 - Letter stations is 
+
+1. Read parameters
+2. Set up configurations
+3. Go to mainLoop in RenderWindow.java in user interface
+4. Render every 6 seconds
+5. 
