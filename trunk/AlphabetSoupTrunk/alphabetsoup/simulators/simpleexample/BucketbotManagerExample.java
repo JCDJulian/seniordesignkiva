@@ -12,32 +12,44 @@ import alphabetsoup.base.*;
  * to dispense jobs to bucketbots.
  * @author Chris Hazard
  */
-public class BucketbotManagerExample implements Updateable {
+public class BucketbotManagerExample implements Updateable 
+{
 	protected LinkedHashSet<Bucket> usedBuckets = new LinkedHashSet<Bucket>();
 	protected LinkedHashSet<Bucket> unusedBuckets = new LinkedHashSet<Bucket>();
+	protected List<LetterWordStationPair> openLetterRequests = new ArrayList<LetterWordStationPair>();
+	protected List<LetterLetterStationPair> availableLetters = new ArrayList<LetterLetterStationPair>();
+	protected List<LetterBucketPair> lettersInBuckets = new ArrayList<LetterBucketPair>();
+	protected List<Circle> unusedBucketStorageLocations = new ArrayList<Circle>();
+	protected HashMap<Bucket,Circle> pendingBucketStorageLocations = new HashMap<Bucket,Circle>();
+	protected HashMap<Bucket,Circle> usedBucketStorageLocations = new HashMap<Bucket,Circle>();
 	
-	public BucketbotManagerExample(Bucket [] buckets) {
-		for(Bucket b : buckets)
-			unusedBuckets.add(b);
+	public BucketbotManagerExample(Bucket [] buckets) 
+	{
+		for(Bucket b : buckets) unusedBuckets.add(b);
 	}
 	
-	public static class LetterWordStationPair {
-		public LetterWordStationPair(Letter l, WordStation s) {
+	public static class LetterWordStationPair 
+	{
+		public LetterWordStationPair(Letter l, WordStation s) 
+		{
 			letter = l;	station = s;
 		}
 		public Letter letter;
 		public WordStation station;
 	}
 	
-	public static class LetterLetterStationPair {
-		public LetterLetterStationPair(Letter l, LetterStation s) {
+	public static class LetterLetterStationPair 
+	{
+		public LetterLetterStationPair(Letter l, LetterStation s) 
+		{
 			letter = l;	station = s;
 		}
 		public Letter letter;
 		public LetterStation station;
 	}
 	
-	public static class LetterBucketPair {
+	public static class LetterBucketPair 
+	{
 		public LetterBucketPair(Letter l, Bucket b) {
 			letter = l;	bucket = b;
 		}
@@ -45,13 +57,6 @@ public class BucketbotManagerExample implements Updateable {
 		public Bucket bucket;
 	}
 	
-	protected List<LetterWordStationPair> openLetterRequests = new ArrayList<LetterWordStationPair>();
-	protected List<LetterLetterStationPair> availableLetters = new ArrayList<LetterLetterStationPair>();
-	protected List<LetterBucketPair> lettersInBuckets = new ArrayList<LetterBucketPair>();
-	
-	protected List<Circle> unusedBucketStorageLocations = new ArrayList<Circle>();
-	protected HashMap<Bucket,Circle> pendingBucketStorageLocations = new HashMap<Bucket,Circle>();
-	protected HashMap<Bucket,Circle> usedBucketStorageLocations = new HashMap<Bucket,Circle>();
 	
 	/**Adds a new valid currently used location to store buckets on the map
 	 */
@@ -62,7 +67,8 @@ public class BucketbotManagerExample implements Updateable {
 	
 	/**Adds a new valid unused location to store buckets on the map
 	 */
-	public void addNewValidBucketStorageLocation(float x, float y) {
+	public void addNewValidBucketStorageLocation(float x, float y) 
+	{
 		unusedBucketStorageLocations.add(new Circle(0.0f, x, y));
 	}
 
@@ -70,7 +76,8 @@ public class BucketbotManagerExample implements Updateable {
 	 * @param w Word assigned
 	 * @param s WordStation the word was assigned to
 	 */
-	public void newWordAssignedToStation(Word w, WordStation s) {
+	public void newWordAssignedToStation(Word w, WordStation s) 
+	{
 		MersenneTwisterFast rand = SimulationWorldSimpleExample.rand;
 		for(Letter l : w.getOriginalLetters()) {
 			if(openLetterRequests.size() > 0)
@@ -84,12 +91,11 @@ public class BucketbotManagerExample implements Updateable {
 	 * @param l Letter assigned
 	 * @param s LetterStation the Letter was assigned to
 	 */
-	public void newLetterBundleAssignedToStation(Letter l, LetterStation s) {
+	public void newLetterBundleAssignedToStation(Letter l, LetterStation s) 
+	{
 		MersenneTwisterFast rand = SimulationWorldSimpleExample.rand;
-		if(availableLetters.size() > 0)
-			availableLetters.add(rand.nextInt(availableLetters.size()), new LetterLetterStationPair(l, s));
-		else
-			availableLetters.add(new LetterLetterStationPair(l, s));
+		if(availableLetters.size() > 0) availableLetters.add(rand.nextInt(availableLetters.size()), new LetterLetterStationPair(l, s));
+		else availableLetters.add(new LetterLetterStationPair(l, s));
 	}
 	
 	/* (non-Javadoc)

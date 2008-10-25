@@ -35,7 +35,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 	
 	public SimulationWorldSimpleExample() 
 	{
-		super("alphabetsoup.config");
+		super("kiva.config");
 		
 		simulationWorldExample = this;
 
@@ -115,6 +115,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		for(LetterStation s : letterStations) updateables.add((Updateable)s);
 		
 		//finish adding things to be rendered
+		
 		if(usingGUI) 
 		{
 			RenderWindow.addAdditionalDetailRender(new WordListRender((WordListBase)wordList));
@@ -128,7 +129,6 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 			{
 				RenderWindow.addSolidRender(new WordStationRender((WordStationBase)s));
 			}
-			
 			for(Bucket b : buckets)
 			{
 				RenderWindow.addLineRender(new BucketRender((BucketBase)b));
@@ -138,6 +138,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 				RenderWindow.addLineRender(new BucketbotRender((BucketbotBase)r));
 			}
 		}
+		
 	}
 	
 	/**Moves the LetterStations evenly across the left side, WordStations evenly across the right side,
@@ -152,9 +153,11 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		
 		//spread letter stations evenly across on the left side
 		// NEED TO SPREAD REPLENISHMENT STATION HERE
+		System.out.println("LETTER STATION POSITIONS");
 		for(int i = 0; i < letterStations.length; i++ ) 
 		{
 			Circle c = (Circle) letterStations[i];
+			System.out.println(Math.max(c.getRadius(), bucketbot_radius) + " : " + (i + 1) * map.getHeight() / (1 + letterStations.length));
 			c.setInitialPosition(Math.max(c.getRadius(), bucketbot_radius), (i + 1) * map.getHeight() / (1 + letterStations.length) );
 			circles.add(c);
 			map.addLetterStation(letterStations[i]);
@@ -162,9 +165,11 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		
 		//spread word stations evenly across on the right side
 		// NEED TO SPREAD PICKERS HERE
+		System.out.println("WORD STATION POSITIONS");
 		for(int i = 0; i < wordStations.length; i++ ) 
 		{
 			Circle c = (Circle) wordStations[i];
+			System.out.println(map.getWidth() - Math.max(c.getRadius(), bucketbot_radius) + " : " + (i + 1) * map.getHeight() / (1 + wordStations.length));
 			c.setInitialPosition(map.getWidth() - Math.max(c.getRadius(), bucketbot_radius), (i + 1) * map.getHeight() / (1 + wordStations.length) );
 			circles.add(c);
 			map.addWordStation(wordStations[i]);
@@ -174,6 +179,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		// NEED TO SPREAD SKU STANDS HERE
 		float placeable_width = map.getWidth() - wordStations[0].getRadius() - letterStations[0].getRadius() - 16 * bucketbots[0].getRadius();
 		float placeable_height = map.getHeight() - 8 * bucketbots[0].getRadius();
+		System.out.println("Placeable width and height " + placeable_width + " : " + placeable_height);
 		
 		//find area to store bucket that will allow all buckets to be placed
 		// WHAT IS THE DIFFERENCE BETWEEN THAT AND THE ABOVE POSITION
@@ -181,17 +187,22 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		int height_count = (int)Math.ceil((float)buckets.length/width_count);
 		float bucket_storage_spot_width = placeable_width / width_count;
 		float bucket_storage_spot_height = placeable_height / height_count;
+		System.out.println("Width count and height count " + width_count + " : " + height_count);
+		System.out.println("Bucket storage spot width and height " + bucket_storage_spot_width + " : " + bucket_storage_spot_height);
 		
 		//put a bucket in each location
-		// 
 		float x_start = (map.getWidth() - placeable_width + bucket_storage_spot_width) / 2;
 		float y_start = (map.getHeight() - placeable_height + bucket_storage_spot_height) / 2;
 		//float x_pos = x_start, y_pos = y_start;
 		int x_pos = 0;
 		int y_pos = 0;
+		
 		for(Bucket b : buckets) 
 		{
 			//place bucket
+			//float x_pos1 = x_pos * bucket_storage_spot_width + x_start;
+			//float y_pos1 = y_pos * bucket_storage_spot_height + y_start;
+			System.out.println(x_pos * bucket_storage_spot_width + x_start + " : " + y_pos * bucket_storage_spot_height + y_start);
 			((Circle)b).setInitialPosition(x_pos * bucket_storage_spot_width + x_start, y_pos * bucket_storage_spot_height + y_start);
 			circles.add((Circle)b);
 			bucketbotManager.addNewUsedBucketStorageLocation(b); // IMPORTANT: ADD BUCKET TO IT MANAGER
@@ -228,7 +239,8 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		{
 			boolean collision;
 			float new_x, new_y;
-			do {
+			do 
+			{
 				new_x = rand.nextFloat() * (map.getWidth() - 2*c.getRadius()) + c.getRadius();
 				new_y = rand.nextFloat() * (map.getHeight() - 2*c.getRadius()) + c.getRadius();
 
@@ -248,6 +260,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		for(Bucketbot r: bucketbots)	map.addRobot(r);
 	}
 	
+	/*
 	private void MSAccessHandler()
 	{
 		try
@@ -264,18 +277,18 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 			if (rs != null) // if rs == null, then there is no ResultSet to view
 			while ( rs.next()) // this will step through our data row-by-row
 			{
-				/* the next line will get the first column in our current row's ResultSet
-				as a String ( getString( columnNumber) ) and output it to the screen */
 				System.out.println("x_pos: " + rs.getString(1) + " and y_pos: " + rs.getString(2));
 			}
 			s.close(); // close the Statement to let the database know we're done with it
 			con.close();
 		}
-        catch (Exception e) {
+        catch (Exception e) 
+        {
             System.out.println("Error: " + e);
         }
         System.out.println("Hello");
 	}
+	*/
 	
 	/**Launches the Alphabet Soup simulation without user interface.
 	 * @param args
@@ -293,5 +306,6 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 			simulationWorld.update( ((SimulationWorldSimpleExample)simulationWorld).simulationDuration);
 		}
 		SummaryReport.generateReport(simulationWorld);
+		
 	}
 }
