@@ -81,8 +81,10 @@ public class RenderWindow {
 		additionalDetailRenders.add(r);
 	}
 	
-	static class ZoomWindow {
-		public ZoomWindow(float x1, float y1, float x2, float y2) {
+	static class ZoomWindow 
+	{
+		public ZoomWindow(float x1, float y1, float x2, float y2) 
+		{
 			this.x1 = x1;	this.y1 = y1;	this.x2 = x2;	this.y2 = y2;
 		}
 		float x1, y1, x2, y2;
@@ -405,15 +407,15 @@ public class RenderWindow {
 
 		//set up frames per second measuring
 		final int num_frame_times = 6;
+		
 		double[] frame_times = new double[num_frame_times];
-		for(int i = 0; i < num_frame_times; i++)
-			frame_times[i] = 0;
+		for(int i = 0; i < num_frame_times; i++) frame_times[i] = 0;
 		int cur_frame_time_index = 0;
 		
 		long last_time = System.nanoTime();
 		//loop until exit, display closed, or simulation time is done running (if applicable)
-		while(!exitRequested && !Display.isCloseRequested()
-				&& (elapsed_time == 0.0 || simulation_end_time > simulationWorld.getCurrentTime()) ) {
+		while(!exitRequested && !Display.isCloseRequested() && (elapsed_time == 0.0 || simulation_end_time > simulationWorld.getCurrentTime()) ) 
+		{
 			readKeyboard();
 			readMouse();
 			
@@ -427,21 +429,18 @@ public class RenderWindow {
 			
 			//compute frames per second as the average of the last num_frame_times
 			double ave_frame_time = 0.0f;
-			for(int i = 0; i < num_frame_times; i++)
-				ave_frame_time += frame_times[i];
+			for(int i = 0; i < num_frame_times; i++) ave_frame_time += frame_times[i];
 			ave_frame_time /= num_frame_times;
 			framesPerSecond = (float)(1/ave_frame_time);
 
 			//if last frame was less than a quarter second, reduce update rate to keep things under control
-			if(update_amount_in_seconds > 0.25)
-				updateRate *= 0.25 / update_amount_in_seconds;
+			if(update_amount_in_seconds > 0.25) updateRate *= 0.25 / update_amount_in_seconds;
 
-			if(!paused) {
+			if(!paused) 
+			{
 				double time_delta = updateRate * update_amount_in_seconds;
 				//if simulation_duration is specified, don't let it go past that time 
-				if(elapsed_time > 0.0)
-					time_delta = Math.min(simulation_end_time - simulationWorld.getCurrentTime(), time_delta);
-
+				if(elapsed_time > 0.0) time_delta = Math.min(simulation_end_time - simulationWorld.getCurrentTime(), time_delta);
 				simulationWorld.update(time_delta);
 			}
 
