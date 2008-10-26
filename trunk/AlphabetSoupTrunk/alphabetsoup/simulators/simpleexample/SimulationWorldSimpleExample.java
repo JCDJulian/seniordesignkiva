@@ -39,20 +39,24 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		
 		simulationWorldExample = this;
 
+		usingGUI = (Integer.parseInt(params.getProperty("useGUI")) == 1);
+		String window_size[] = params.getProperty("window_size").split("x");
+		
 		float bucketbot_size = Float.parseFloat(params.getProperty("bucketbot_size"));
 		float bucket_size = Float.parseFloat(params.getProperty("bucket_size"));
 		float station_size = Float.parseFloat(params.getProperty("station_size"));
-		int bucket_capacity = Integer.parseInt(params.getProperty("bucket_capacity"));
 		int bundle_size = Integer.parseInt(params.getProperty("bundle_size"));
+		
+		int bucket_capacity = Integer.parseInt(params.getProperty("bucket_capacity"));
 		int letter_station_capacity = Integer.parseInt(params.getProperty("letter_station_capacity"));
 		int word_station_capacity = Integer.parseInt(params.getProperty("word_station_capacity"));
+		
 		float bucket_pickup_setdown_time = Float.parseFloat( params.getProperty("bucket_pickup_setdown_time"));
 		float letter_to_bucket_time = Float.parseFloat( params.getProperty("letter_to_bucket_time"));
 		float bucket_to_letter_time = Float.parseFloat( params.getProperty("bucket_to_letter_time"));
 		float word_completion_time = Float.parseFloat( params.getProperty("word_completion_time"));
 		float collision_penalty_time = Float.parseFloat( params.getProperty("collision_penalty_time"));
-		usingGUI = (Integer.parseInt(params.getProperty("useGUI")) == 1);
-		String window_size[] = params.getProperty("window_size").split("x");
+		
 		simulationDuration = Double.parseDouble(params.getProperty("simulation_duration"));
 		
 		//Set up base map to add things to
@@ -94,21 +98,22 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		///////////////////////////////////////////////////////////////////////////
 		wordList.generateWordsFromFile(params.getProperty("dictionary"), letterColors, Integer.parseInt(params.getProperty("number_of_words")) );
 		
-		//populate buckets
 		//////////////////////////////////////////////////////////////////////////
-		// THIS IS WHERE INITIAL INVENTORY IS CREATED
+		// THIS IS WHERE INITIAL INVENTORY IS CREATED (populate buckets
 		//////////////////////////////////////////////////////////////////////////
 		initializeBucketContentsRandom(Float.parseFloat(params.getProperty("initial_inventory")), bundle_size);
 		
 		//populate update list
+		// updateable WILL BE UPDATED OR REFRESHED FOR EVERY SOME SECOND COMPUTED IN Update() in SimulationWorld.java
 		updateables = new ArrayList<Updateable>();
 		
-		for(Bucketbot r : bucketbots) updateables.add((Updateable)r);
 		
+		// updateable will contain bucket bots, map,  
+		for(Bucketbot r : bucketbots) updateables.add((Updateable)r);
 		updateables.add((Updateable)map);
-		updateables.add((Updateable)bucketbotManager);
-		updateables.add((Updateable)wordManager);
-		updateables.add((Updateable)letterManager);
+		updateables.add((Updateable)bucketbotManager); 	// IN EXAMPLE
+		updateables.add((Updateable)wordManager);		// Updateable
+		updateables.add((Updateable)letterManager);		// IN EXAMPLE
 		
 		for(WordStation s : wordStations) updateables.add((Updateable)s);
 		
@@ -153,11 +158,11 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		
 		//spread letter stations evenly across on the left side
 		// NEED TO SPREAD REPLENISHMENT STATION HERE
-		System.out.println("LETTER STATION POSITIONS");
+		//System.out.println("LETTER STATION POSITIONS");
 		for(int i = 0; i < letterStations.length; i++ ) 
 		{
 			Circle c = (Circle) letterStations[i];
-			System.out.println(Math.max(c.getRadius(), bucketbot_radius) + " : " + (i + 1) * map.getHeight() / (1 + letterStations.length));
+			//System.out.println(Math.max(c.getRadius(), bucketbot_radius) + " : " + (i + 1) * map.getHeight() / (1 + letterStations.length));
 			c.setInitialPosition(Math.max(c.getRadius(), bucketbot_radius), (i + 1) * map.getHeight() / (1 + letterStations.length) );
 			circles.add(c);
 			map.addLetterStation(letterStations[i]);
@@ -165,11 +170,11 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		
 		//spread word stations evenly across on the right side
 		// NEED TO SPREAD PICKERS HERE
-		System.out.println("WORD STATION POSITIONS");
+		//System.out.println("WORD STATION POSITIONS");
 		for(int i = 0; i < wordStations.length; i++ ) 
 		{
 			Circle c = (Circle) wordStations[i];
-			System.out.println(map.getWidth() - Math.max(c.getRadius(), bucketbot_radius) + " : " + (i + 1) * map.getHeight() / (1 + wordStations.length));
+			//System.out.println(map.getWidth() - Math.max(c.getRadius(), bucketbot_radius) + " : " + (i + 1) * map.getHeight() / (1 + wordStations.length));
 			c.setInitialPosition(map.getWidth() - Math.max(c.getRadius(), bucketbot_radius), (i + 1) * map.getHeight() / (1 + wordStations.length) );
 			circles.add(c);
 			map.addWordStation(wordStations[i]);
@@ -179,7 +184,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		// NEED TO SPREAD SKU STANDS HERE
 		float placeable_width = map.getWidth() - wordStations[0].getRadius() - letterStations[0].getRadius() - 16 * bucketbots[0].getRadius();
 		float placeable_height = map.getHeight() - 8 * bucketbots[0].getRadius();
-		System.out.println("Placeable width and height " + placeable_width + " : " + placeable_height);
+		//System.out.println("Placeable width and height " + placeable_width + " : " + placeable_height);
 		
 		//find area to store bucket that will allow all buckets to be placed
 		// WHAT IS THE DIFFERENCE BETWEEN THAT AND THE ABOVE POSITION
@@ -187,8 +192,8 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		int height_count = (int)Math.ceil((float)buckets.length/width_count);
 		float bucket_storage_spot_width = placeable_width / width_count;
 		float bucket_storage_spot_height = placeable_height / height_count;
-		System.out.println("Width count and height count " + width_count + " : " + height_count);
-		System.out.println("Bucket storage spot width and height " + bucket_storage_spot_width + " : " + bucket_storage_spot_height);
+		//System.out.println("Width count and height count " + width_count + " : " + height_count);
+		//System.out.println("Bucket storage spot width and height " + bucket_storage_spot_width + " : " + bucket_storage_spot_height);
 		
 		//put a bucket in each location
 		float x_start = (map.getWidth() - placeable_width + bucket_storage_spot_width) / 2;
@@ -202,7 +207,7 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 			//place bucket
 			//float x_pos1 = x_pos * bucket_storage_spot_width + x_start;
 			//float y_pos1 = y_pos * bucket_storage_spot_height + y_start;
-			System.out.println(x_pos * bucket_storage_spot_width + x_start + " : " + y_pos * bucket_storage_spot_height + y_start);
+			//System.out.println(x_pos * bucket_storage_spot_width + x_start + " : " + y_pos * bucket_storage_spot_height + y_start);
 			((Circle)b).setInitialPosition(x_pos * bucket_storage_spot_width + x_start, y_pos * bucket_storage_spot_height + y_start);
 			circles.add((Circle)b);
 			bucketbotManager.addNewUsedBucketStorageLocation(b); // IMPORTANT: ADD BUCKET TO IT MANAGER
@@ -303,7 +308,8 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		}
 		else
 		{
-			simulationWorld.update( ((SimulationWorldSimpleExample)simulationWorld).simulationDuration);
+			// move simulation forward by elapsed_time = simulationDuration
+			simulationWorld.update(((SimulationWorldSimpleExample)simulationWorld).simulationDuration);
 		}
 		SummaryReport.generateReport(simulationWorld);
 		
