@@ -106,8 +106,10 @@ public class WordListBase implements WordList {
 		
 		//go through and check the range of each color,
 		// pulling random number down to the current range
-		for(LetterColor c : baseColors) {
-			if(c.getProbability() > r) {
+		for(LetterColor c : baseColors) 
+		{
+			if(c.getProbability() > r) 
+			{
 				chosen_color = c.getID();
 				break;
 			}

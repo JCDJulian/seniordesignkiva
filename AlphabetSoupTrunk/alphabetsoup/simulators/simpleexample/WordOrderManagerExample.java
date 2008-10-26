@@ -24,17 +24,20 @@ public class WordOrderManagerExample implements Updateable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Updateable#update(double, double)
 	 */
-	public void update(double last_time, double cur_time) {
+	public void update(double last_time, double cur_time) 
+	{
 		WordList wl = SimulationWorldSimpleExample.getSimulationWorld().getWordList();
 		LetterManagerExample lm = ((LetterManagerExample)((SimulationWorldSimpleExample)SimulationWorldSimpleExample.getSimulationWorld()).letterManager);
 		
 		//see if all done
-		if(wl.getAvailableWords().size() == 0)
-			return;
+		if(wl.getAvailableWords().size() == 0) return;
 		
-		for(WordStation s : SimulationWorldSimpleExample.getSimulationWorld().getWordStations()) {
+		for(WordStation s : SimulationWorldSimpleExample.getSimulationWorld().getWordStations()) 
+		{
 			//give the station words if it needs them
-			if(s.getAssignedWords().size() < s.getCapacity()) {
+			if(s.getAssignedWords().size() < s.getCapacity()) 
+			{
+				// GET THE ORDER AND ASSIGN INSTEAD OF WORD
 				Word w = wl.takeAvailableWord(0);
 				s.assignWord(w);
 				SimulationWorldSimpleExample.getSimulationWorld().bucketbotManager.newWordAssignedToStation(w, s);
@@ -42,8 +45,7 @@ public class WordOrderManagerExample implements Updateable {
 			}
 			
 			//can't continue if out of words
-			if(wl.getAvailableWords().size() == 0)
-				return;
+			if(wl.getAvailableWords().size() == 0) return;
 		}
 	}
 

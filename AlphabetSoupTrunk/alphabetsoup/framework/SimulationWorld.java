@@ -37,13 +37,9 @@ public class SimulationWorld
 	 * the colorID is the color's index into this list.
 	 */
 	protected List<LetterColor> letterColors;
-
 	public static MersenneTwisterFast rand = new MersenneTwisterFast();
-	
-	protected boolean usingGUI;
-	
+	protected boolean usingGUI;	
 	protected Properties params;	//parameters of the simulation
-	
 	protected static SimulationWorld simulationWorld;
 	
 	public static SimulationWorld getSimulationWorld() 
@@ -54,7 +50,6 @@ public class SimulationWorld
 	public void resetStatistics() 
 	{
 		statisticsTime = currentTime;
-		
 		for(Bucketbot b : bucketbots) b.resetStatistics();
 		for(LetterStation ls : letterStations) ls.resetStatistics();
 		for(WordStation ws : wordStations) ws.resetStatistics();
@@ -76,36 +71,36 @@ public class SimulationWorld
 		{
 			FileInputStream fis = new FileInputStream(configuration_file_name);
 			params.load(fis);
-		} catch(Throwable e) { System.out.println("could not open alphabetsoup.config"); System.exit(1); }
+		} 
+		catch(Throwable e) 
+		{ 
+			System.out.println("could not open alphabetsoup.config"); System.exit(1); 
+		}
 		
 		float map_width = Float.parseFloat(params.getProperty("map_width"));
 		float map_length = Float.parseFloat(params.getProperty("map_length"));
 		float tolerance = Float.parseFloat(params.getProperty("tolerance"));
 		float max_acceleration = Float.parseFloat( params.getProperty("max_acceleration"));
 		float max_velocity = Float.parseFloat( params.getProperty("max_velocity"));
+		
 		// CALL MAP CLASS USING PARAMETERS
 		map = new Map(map_width, map_length, tolerance, max_acceleration, max_velocity);
 		
 		long random_seed = Integer.parseInt(params.getProperty("random_seed"));
 		if(random_seed != 0) rand.setSeed(random_seed);
 		
+		// USE WordListBase as the class
 		wordList = (WordList)createClass(params.getProperty("word_list_class"));
+		//System.out.println(wordList.getClass().getName());
 		
 		int num_bucketbots = Integer.parseInt(params.getProperty("num_bucketbots"));
 		bucketbots = new Bucketbot[num_bucketbots];
-		System.out.println("Number of bucket bots " + num_bucketbots);
-		
 		int num_buckets = Integer.parseInt(params.getProperty("num_buckets"));
 		buckets = new Bucket[num_buckets];
-		System.out.println("Number of buckets " + num_buckets);
-		
 		int num_word_stations = Integer.parseInt(params.getProperty("num_word_stations"));
 		wordStations = new WordStation[num_word_stations];
-		System.out.println("Number of words/picking stations " + num_word_stations);
-		
 		int num_letter_stations = Integer.parseInt(params.getProperty("num_letter_stations"));
 		letterStations = new LetterStation[num_letter_stations];
-		System.out.println("Number of letter/replenishment stations " + num_letter_stations);
 		
 		//get letter colors
 		// LETTER COLOR GOT FROM THE FILES
@@ -136,9 +131,11 @@ public class SimulationWorld
 	
 	public static Object createClass(String class_name, Object ... params) 
 	{
+		//System.out.println("Class name is " + class_name);
 		try
 		{
 			Class classes[] = new Class[params.length];
+			// if there are any params, enter for loop
 			for(int i = 0; i < params.length; i++) 
 			{
 				classes[i] = params[i].getClass();
@@ -155,7 +152,7 @@ public class SimulationWorld
 				}
 			}
 			Constructor constr_def = Class.forName(class_name).getConstructor(classes);
-			return constr_def .newInstance(params);
+			return constr_def.newInstance(params);
 		} catch(Throwable e) { System.out.println("could not load class " + class_name + ". " + e + ": " + e.getCause()); System.exit(1); }
 		return null;
 	}
@@ -163,21 +160,23 @@ public class SimulationWorld
 	/**Move the simulation forward by the specified amount of time
 	 * @param elapsed_time relative time to move the system forward
 	 */
-	public void update(double elapsed_time) {
-		
-		//don't want to update less than the time required for something to move past 
-		// 1/3 of the tolerance in a given time interval
+	public void update(double elapsed_time) 
+	{
+		// START AT TIME 0 PLUS ELAPSED TIME READ FROM FILE
+		//don't want to update less than the time required for something to move past 1/3 of the tolerance in a given time interval
 		float minimumUpdateTime = map.getTolerance()/3 / map.getMaxVelocity();
 		
+		//System.out.println("Current time " + currentTime + " Elapse time " + elapsed_time);
 		double update_finish_time = currentTime + elapsed_time;
-		while(currentTime < update_finish_time) {
-			
+		while(currentTime < update_finish_time) 
+		{
 			//get the next event time
 			double next_time = update_finish_time;
 
 			//find the time of the earliest next event
-			for(Updateable u : updateables)
-				next_time = Math.min(u.getNextEventTime(currentTime), next_time);
+			for(Updateable u : updateables) next_time = Math.min(u.getNextEventTime(currentTime), next_time);
+			
+			
 			
 			//see if a potential collision will happen before the next event
 			double min_time_delta = Math.min( map.getShortestTimeWithoutCollision(), next_time - currentTime);
@@ -186,9 +185,15 @@ public class SimulationWorld
 			//update by at least a the minimum, but don't go past the next time
 			next_time = Math.min(update_finish_time, currentTime + min_time_delta);
 
-			//run up til the next event
-			for(Updateable u : updateables)
+			//System.out.println("Current time " + currentTime + " Next time " + next_time);
+			
+			//run up until the next event
+			// THIS IS WHERE EVERYTHING IS UPDATED. Updateable contains lists of objects
+			for(Updateable u : updateables) 
+			{
+				System.out.println("Upating " + u.getClass().getName());
 				u.update(currentTime, next_time);
+			}
 			
 			currentTime = next_time;
 		}
@@ -201,19 +206,20 @@ public class SimulationWorld
 	public void initializeBucketContentsRandom(float initial_inventory, int bundle_size) 
 	{
 		int initial_num_letter_bundles = (int)(initial_inventory * buckets.length * buckets[0].getCapacity() / bundle_size + 0.5f);
+		System.out.println("Initial number of letter " + initial_num_letter_bundles);
 		for(int i = 0; i < initial_num_letter_bundles; i++) 
 		{
 			while(true) 
 			{
 				//pick random bucket
+				// NO NEED TO PICK RANDOM BUCKET SINCE WE KNOW WHICH BUCKET CONTAIN WHAT
 				Bucket b = buckets[rand.nextInt(buckets.length)];
-				if(b.getLetters().size() + bundle_size > b.getCapacity())
-					continue;
+				if(b.getLetters().size() + bundle_size > b.getCapacity()) continue;
 				
 				//give it a new letter
+				// INSTEAD OF GENERATING LETTER, WE INSTANTIATE Item(Letter) OBJECT AND ADD TO BUCKET (b.addLetter or b.addItem)
 				Letter l = wordList.generateRandomLetter();
-				for(int j = 0; j < bundle_size; j++)
-					b.addLetter(l.clone());
+				for(int j = 0; j < bundle_size; j++) b.addLetter(l.clone());
 				break;
 			}
 		}
@@ -222,7 +228,8 @@ public class SimulationWorld
 	/**
 	 * @return Returns the letterStations.
 	 */
-	public LetterStation[] getLetterStations() {
+	public LetterStation[] getLetterStations() 
+	{
 		return letterStations;
 	}
 

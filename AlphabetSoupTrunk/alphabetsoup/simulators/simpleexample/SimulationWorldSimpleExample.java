@@ -86,10 +86,23 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 			buckets[i] = (Bucket) new BucketBase(bucket_size, bucket_capacity);
 		}
 		
-		bucketbotManager	= new BucketbotManagerExample(buckets);
+		bucketbotManager	= new BucketbotManagerExample(buckets);		// // ADD THOSE BUCKETS TO THE MANAGER
 		letterManager	= new LetterManagerExample();
 		wordManager		= new WordOrderManagerExample();
-
+		
+		//populate update list
+		// updateable WILL BE UPDATED OR REFRESHED FOR EVERY SOME SECOND COMPUTED IN Update() in SimulationWorld.java
+		updateables = new ArrayList<Updateable>();
+		// ADD THINGS TO BE RENDERED 
+		for(Bucketbot r : bucketbots) updateables.add((Updateable)r);
+		updateables.add((Updateable)map);
+		updateables.add((Updateable)bucketbotManager); 	
+		updateables.add((Updateable)wordManager);		
+		updateables.add((Updateable)letterManager);	
+		for(WordStation s : wordStations) updateables.add((Updateable)s);
+		for(LetterStation s : letterStations) updateables.add((Updateable)s);
+		//finish adding things to be rendered
+		
 		initializeRandomLayout();
 		
 		//generate words
@@ -102,24 +115,6 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 		// THIS IS WHERE INITIAL INVENTORY IS CREATED (populate buckets
 		//////////////////////////////////////////////////////////////////////////
 		initializeBucketContentsRandom(Float.parseFloat(params.getProperty("initial_inventory")), bundle_size);
-		
-		//populate update list
-		// updateable WILL BE UPDATED OR REFRESHED FOR EVERY SOME SECOND COMPUTED IN Update() in SimulationWorld.java
-		updateables = new ArrayList<Updateable>();
-		
-		
-		// updateable will contain bucket bots, map,  
-		for(Bucketbot r : bucketbots) updateables.add((Updateable)r);
-		updateables.add((Updateable)map);
-		updateables.add((Updateable)bucketbotManager); 	// IN EXAMPLE
-		updateables.add((Updateable)wordManager);		// Updateable
-		updateables.add((Updateable)letterManager);		// IN EXAMPLE
-		
-		for(WordStation s : wordStations) updateables.add((Updateable)s);
-		
-		for(LetterStation s : letterStations) updateables.add((Updateable)s);
-		
-		//finish adding things to be rendered
 		
 		if(usingGUI) 
 		{
@@ -143,7 +138,6 @@ public class SimulationWorldSimpleExample extends SimulationWorld
 				RenderWindow.addLineRender(new BucketbotRender((BucketbotBase)r));
 			}
 		}
-		
 	}
 	
 	/**Moves the LetterStations evenly across the left side, WordStations evenly across the right side,

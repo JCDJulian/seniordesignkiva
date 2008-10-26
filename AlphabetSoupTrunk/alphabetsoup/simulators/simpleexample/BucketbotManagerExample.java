@@ -57,8 +57,7 @@ public class BucketbotManagerExample implements Updateable
 		public Letter letter;
 		public Bucket bucket;
 	}
-	
-	
+
 	/**Adds a new valid currently used location to store buckets on the map
 	 */
 	public void addNewUsedBucketStorageLocation(Bucket b) 
@@ -118,7 +117,6 @@ public class BucketbotManagerExample implements Updateable
 	 */
 	public void requestNewTask(Bucketbot r) 
 	{
-		
 		alphabetsoup.framework.Map map = SimulationWorldSimpleExample.getSimulationWorld().map;
 		MersenneTwisterFast rand = SimulationWorldSimpleExample.rand;
 		
@@ -134,8 +132,8 @@ public class BucketbotManagerExample implements Updateable
 		//robot doesn't have a bucket
 		
 		//if have letters in buckets, send one off to service a word station
-		if(lettersInBuckets.size() > 0) {
-			
+		if(lettersInBuckets.size() > 0) 
+		{
 			LetterBucketPair lbp = null;
 			for(int i = 0; i < lettersInBuckets.size(); i++) {
 				
@@ -171,21 +169,23 @@ public class BucketbotManagerExample implements Updateable
 
 		//no letters available in buckets or no free buckets, so get something from a letter station
 		// if there are available letters
-		if(unusedBuckets.size() > 0
-				&& availableLetters.size() > 0) {
+		if(unusedBuckets.size() > 0 && availableLetters.size() > 0) 
+		{
 			//find a bucket that has room
 			Bucket b = null;
 			int bundle_size = SimulationWorld.getSimulationWorld().letterStations[0].getBundleSize();
-			for(Bucket i : unusedBuckets) {
-				if(i.getLetters().size() + bundle_size <= i.getCapacity()
-						&& usedBucketStorageLocations.containsKey(i)) {
+			for(Bucket i : unusedBuckets) 
+			{
+				if(i.getLetters().size() + bundle_size <= i.getCapacity() && usedBucketStorageLocations.containsKey(i)) 
+				{
 					b = i;
 					break;
 				}
 			}
 			
 			//if bucket is free with free capacity, grab the letter
-			if(b != null) {
+			if(b != null) 
+			{
 				//get first available letter
 				Letter l = availableLetters.get(0).letter;
 				LetterStation s = availableLetters.get(0).station;
@@ -212,27 +212,30 @@ public class BucketbotManagerExample implements Updateable
 	 * @param r Bucketbot which has completed a task
 	 * @param t task which was completed -implementations may use any object types as a task
 	 */
-	public void taskComplete(Bucketbot r, BucketbotTask t) {
-		if(t == null)
-			return;
+	public void taskComplete(Bucketbot r, BucketbotTask t) 
+	{
+		if(t == null) return;
 		//tell bucketbot its task is done
 		r.assignTask(null);
 		
 		//if had bucket, but no longer, make bucket free again
-		if(t.getBucket() != null && r.getBucket() == null) {
+		if(t.getBucket() != null && r.getBucket() == null) 
+		{
 			unusedBuckets.add(t.getBucket());
 			usedBuckets.remove(t.getBucket());
 		}
 		
-		if(t.getTaskType() == BucketbotTask.TaskType.STORE_BUCKET) {
+		if(t.getTaskType() == BucketbotTask.TaskType.STORE_BUCKET) 
+		{
 			//move from pending list to used
 			Circle location = pendingBucketStorageLocations.get(t.getBucket());
 			pendingBucketStorageLocations.remove(t.getBucket());
 			usedBucketStorageLocations.put(t.getBucket(), location);
 		}
 		
-		if(t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_WORD_STATION
-				|| t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_LETTER_STATION) {
+		if(t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_WORD_STATION 
+				|| t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_LETTER_STATION) 
+		{
 			//move from pending list to unused
 			Circle location = pendingBucketStorageLocations.get(t.getBucket());
 			pendingBucketStorageLocations.remove(t.getBucket());
@@ -242,9 +245,9 @@ public class BucketbotManagerExample implements Updateable
 		//recheck bucket inventory
 		//TODO this is inefficient; only change lettersInBuckets when inventory changes?
 		lettersInBuckets.clear();
-		for(Bucket b : SimulationWorldSimpleExample.getSimulationWorld().getBuckets()) {
-			for(Letter l : b.getLetters())
-				lettersInBuckets.add(new LetterBucketPair(l, b));
+		for(Bucket b : SimulationWorldSimpleExample.getSimulationWorld().getBuckets()) 
+		{
+			for(Letter l : b.getLetters()) lettersInBuckets.add(new LetterBucketPair(l, b));
 		}
 	}
 	
@@ -252,22 +255,25 @@ public class BucketbotManagerExample implements Updateable
 	 * @param r Bucketbot which has aborted a task
 	 * @param t task which was aborted -implementations may use any object types as a task
 	 */
-	public void taskAborted(Bucketbot r, BucketbotTask t) {
-		if(t == null || r == null)
-			return;
+	public void taskAborted(Bucketbot r, BucketbotTask t) 
+	{
+		if(t == null || r == null) return;
 		
 		//tell bucketbot its task is done
 		r.assignTask(null);
 		
 		//if it had a bucket, free it
-		if(t.getBucket() != null && r.getBucket() == null) {
+		if(t.getBucket() != null && r.getBucket() == null) 
+		{
 			unusedBuckets.add(t.getBucket());
 			usedBuckets.remove(t.getBucket());
 		}
 		
-		if(t.getTaskType() == BucketbotTask.TaskType.STORE_BUCKET) {
+		if(t.getTaskType() == BucketbotTask.TaskType.STORE_BUCKET) 
+		{
 			//if still has bucket, move bucket storage from pending list to unused
-			if(r.getBucket() != null) {
+			if(r.getBucket() != null) 
+			{
 				Circle location = pendingBucketStorageLocations.get(t.getBucket());
 				pendingBucketStorageLocations.remove(t.getBucket());
 				unusedBucketStorageLocations.add(location);
@@ -275,9 +281,11 @@ public class BucketbotManagerExample implements Updateable
 		}
 		
 		if(t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_WORD_STATION
-				|| t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_LETTER_STATION) {
+				|| t.getTaskType() == BucketbotTask.TaskType.TAKE_BUCKET_TO_LETTER_STATION) 
+		{
 			//if never took bucket, then move bucket storage to used list
-			if(r.getBucket() == null) {
+			if(r.getBucket() == null) 
+			{
 				Circle location = pendingBucketStorageLocations.get(t.getBucket());
 				pendingBucketStorageLocations.remove(t.getBucket());
 				usedBucketStorageLocations.put(t.getBucket(), location);
