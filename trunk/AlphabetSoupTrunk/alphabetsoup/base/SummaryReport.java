@@ -55,11 +55,13 @@ public class SummaryReport {
 		for(Bucketbot r : robots) for(String s : r.getTotalTimes().keySet()) states.add(s);
 		
 		//write robot state times
-		for(String s : states) {
+		for(String s : states) 
+		{
 			double time_in_state = 0.0;
 			for(Bucketbot r : robots)
-				if(r.getTotalTimes().containsKey(s))
-					time_in_state += r.getTotalTimes().get(s);
+			{
+				if(r.getTotalTimes().containsKey(s)) time_in_state += r.getTotalTimes().get(s);
+			}
 			lines.add("% in " + s + ": " + four_digits.format( (time_in_state / robots.length / elapsed_time) * 100.0)  );
 		}
 

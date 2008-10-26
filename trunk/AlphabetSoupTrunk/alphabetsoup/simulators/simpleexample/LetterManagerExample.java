@@ -15,7 +15,8 @@ import alphabetsoup.framework.WordStation;
  * stations as they have space. The Letter Manager notified when a new Word is assigned to a WordStation.
  * @author Chris Hazard
  */
-public class LetterManagerExample implements Updateable {
+public class LetterManagerExample implements Updateable 
+{
 	
 	//letters that have been requested but haven't been dispensed
 	protected List<Letter> requiredLetters = new ArrayList<Letter>();
@@ -35,7 +36,9 @@ public class LetterManagerExample implements Updateable {
 	 * @param s WordStation the Word was assigned to
 	 * @param w Word assigned
 	 */
-	public void newWordAssignedToStation(WordStation s, Word w) {
+	public void newWordAssignedToStation(WordStation s, Word w) 
+	{
+		// CALLLED BY WordOrderManagerExample.java
 		//for every letter in the word
 		for(Letter l : w.getOriginalLetters()) {
 			
@@ -62,8 +65,10 @@ public class LetterManagerExample implements Updateable {
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Updateable#update(double, double)
 	 */
-	public void update(double last_time, double cur_time) {
-		for(LetterStation s : SimulationWorldSimpleExample.getSimulationWorld().getLetterStations()) {
+	public void update(double last_time, double cur_time) 
+	{
+		for(LetterStation s : SimulationWorldSimpleExample.getSimulationWorld().getLetterStations()) 
+		{
 			//give the station letters if it needs them
 			if(s.getAssignedLetters().size() < s.getCapacity()) 
 			{

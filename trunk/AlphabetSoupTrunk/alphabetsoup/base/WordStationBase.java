@@ -12,23 +12,26 @@ import alphabetsoup.framework.*;
  * and can be assigned new words when space permits.
  * @author Chris Hazard
  */
-public class WordStationBase extends Circle implements WordStation, Updateable {
+public class WordStationBase extends Circle implements WordStation, Updateable 
+{
 	private int capacity;
 	private float bucketToLetterTime;
 	private float wordCompletionTime;
 	public List<Word> assignedWords;
 	
 	protected double blockedUntilTime;
-	
 	protected int numLettersRequested;	//number of individual letters requested to be taken
 	protected double idleTime;
+	
+	List<LetterRequested> letterTakesRequested = new ArrayList<LetterRequested>();
 	
 	public void resetStatistics() {
 		numLettersRequested = 0;
 		idleTime = 0.0;
 	}
 	
-	protected static class LetterRequested {
+	protected static class LetterRequested 
+	{
 		public LetterRequested(Bucketbot bb, Letter l, Word w) {
 			bucketbot = bb;	letter = l; word = w;	
 		}
@@ -36,8 +39,7 @@ public class WordStationBase extends Circle implements WordStation, Updateable {
 		public Letter letter;
 		public Word word;
 	}
-	List<LetterRequested> letterTakesRequested = new ArrayList<LetterRequested>();
-
+	
 	public WordStationBase(float station_radius, float bucket_to_letter_time, float word_completion_time, int station_capacity) {
 		super(station_radius);
 		resetStatistics();

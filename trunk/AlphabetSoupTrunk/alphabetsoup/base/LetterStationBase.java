@@ -12,7 +12,8 @@ import alphabetsoup.framework.*;
  * when requested to do so.
  * @author Chris Hazard
  */
-public class LetterStationBase extends Circle implements LetterStation, Updateable {
+public class LetterStationBase extends Circle implements LetterStation, Updateable 
+{
 	private int capacity;
 	private int bundleSize;
 	private float letterToBucketTime;
@@ -29,23 +30,27 @@ public class LetterStationBase extends Circle implements LetterStation, Updateab
 		numLettersRequested = 0;
 	}
 	
-	protected static class LetterRequested {
+	// LETTER REQUEST IS A PAIR OF Letter and Bucketbot
+	protected static class LetterRequested 
+	{
 		public LetterRequested(Bucketbot bb, Letter l) {
 			bucketbot = bb;	letter = l;
 		}
 		public Bucketbot bucketbot;
 		public Letter letter;		
 	}
+	
 	List<LetterRequested> lettersRequested = new ArrayList<LetterRequested>();
 	
-	public LetterStationBase(float station_radius, float letter_to_bucket_time, int bundle_size, int station_capacity) {
+	public LetterStationBase(float station_radius, float letter_to_bucket_time, int bundle_size, int station_capacity) 
+	{
 		super(station_radius);
 		resetStatistics();
 		letterToBucketTime = letter_to_bucket_time;
 		bundleSize = bundle_size;
 		capacity = station_capacity;
 
-		blockedUntilTime = -1.0;
+		blockedUntilTime = -1.0;  // initial value
 	}
 	
 	/* (non-Javadoc)
@@ -76,38 +81,38 @@ public class LetterStationBase extends Circle implements LetterStation, Updateab
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.Updateable#update(double, double)
 	 */
-	public void update(double last_time, double cur_time) {
-		if(cur_time < blockedUntilTime)
-			return;
+	public void update(double last_time, double cur_time) 
+	{
+		if(cur_time < blockedUntilTime) return;
 		idleTime += cur_time - last_time;
+		// ITS MAIN TASK IT TO GIVE LETTER BUNDLE TO BUCKET
 		giveLetterBundleToBucket(cur_time);
 	}
 	
-	protected LetterRequested giveLetterBundleToBucket(double cur_time) {
-		while(lettersRequested.size() > 0) {
+	protected LetterRequested giveLetterBundleToBucket(double cur_time) 
+	{
+		while(lettersRequested.size() > 0) 
+		{
 			LetterRequested request = lettersRequested.remove(0);
 			Bucketbot bb = request.bucketbot; 
 			Bucket b = bb.getBucket();
 			Letter l = request.letter;
 
 			//can't service the request if the bucket is full or not close enough
-			if(b.getLetters().size() + bundleSize > b.getCapacity()
-					|| getDistance((Circle)b) > getRadius() )
-				continue;
+			if(b.getLetters().size() + bundleSize > b.getCapacity() || getDistance((Circle)b) > getRadius()) continue;
 				
 			//find matching letter to transfer
-			if(assignedLetters.contains(l)) {
+			if(assignedLetters.contains(l)) 
+			{
 				//transfer letter, wait til transfer is complete, remove request
 				b.addLetter(l);
-				for(int i = 1; i < bundleSize; i++)
-					b.addLetter(l.clone());
+				for(int i = 1; i < bundleSize; i++) b.addLetter(l.clone());
 				assignedLetters.remove(l);
 				blockedUntilTime = cur_time + letterToBucketTime;
 				bb.waitUntil(blockedUntilTime);
 				return request;
 			}
-
-			lettersRequested.remove(0);
+			lettersRequested.remove(0);		// remove the first element of the list
 		}
 		return null;
 	}
@@ -130,11 +135,12 @@ public class LetterStationBase extends Circle implements LetterStation, Updateab
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.LetterStation#requestLetter(alphabetsoup.framework.Bucketbot, alphabetsoup.framework.Letter)
 	 */
-	public void requestLetter(Bucketbot bb, Letter l) {
+	public void requestLetter(Bucketbot bb, Letter l) 
+	{
+		// WHO CALL THIS METHOD SO IT ADD LETTER TO THE REQUESTED LISTS
 		numLettersRequested++;
 
-		if(bb.getBucket() != null)
-			lettersRequested.add(new LetterRequested(bb, l));
+		if(bb.getBucket() != null) lettersRequested.add(new LetterRequested(bb, l));
 	}
 
 	/**
@@ -153,7 +159,8 @@ public class LetterStationBase extends Circle implements LetterStation, Updateab
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.LetterStation#getNumLettersRequested()
 	 */
-	public int getNumLettersRequested() {
+	public int getNumLettersRequested() 
+	{
 		return numLettersRequested;
 	}
 
@@ -163,7 +170,8 @@ public class LetterStationBase extends Circle implements LetterStation, Updateab
 	/* (non-Javadoc)
 	 * @see alphabetsoup.framework.LetterStation#getIdleTime()
 	 */
-	public double getIdleTime() {
+	public double getIdleTime() 
+	{
 		return idleTime;
 	}
 
