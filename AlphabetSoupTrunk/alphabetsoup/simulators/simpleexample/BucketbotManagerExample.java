@@ -50,7 +50,8 @@ public class BucketbotManagerExample implements Updateable
 	
 	public static class LetterBucketPair 
 	{
-		public LetterBucketPair(Letter l, Bucket b) {
+		public LetterBucketPair(Letter l, Bucket b) 
+		{
 			letter = l;	bucket = b;
 		}
 		public Letter letter;
@@ -60,7 +61,8 @@ public class BucketbotManagerExample implements Updateable
 	
 	/**Adds a new valid currently used location to store buckets on the map
 	 */
-	public void addNewUsedBucketStorageLocation(Bucket b) {
+	public void addNewUsedBucketStorageLocation(Bucket b) 
+	{
 		Circle c = new Circle(0.0f, b.getX(), b.getY());
 		usedBucketStorageLocations.put(b, c);
 	}
@@ -79,11 +81,10 @@ public class BucketbotManagerExample implements Updateable
 	public void newWordAssignedToStation(Word w, WordStation s) 
 	{
 		MersenneTwisterFast rand = SimulationWorldSimpleExample.rand;
-		for(Letter l : w.getOriginalLetters()) {
-			if(openLetterRequests.size() > 0)
-				openLetterRequests.add(rand.nextInt(openLetterRequests.size()), new LetterWordStationPair(l, s));
-			else
-				openLetterRequests.add(new LetterWordStationPair(l, s));
+		for(Letter l : w.getOriginalLetters()) 
+		{
+			if(openLetterRequests.size() > 0) openLetterRequests.add(rand.nextInt(openLetterRequests.size()), new LetterWordStationPair(l, s));
+			else openLetterRequests.add(new LetterWordStationPair(l, s));
 		}
 	}
 	
@@ -115,7 +116,8 @@ public class BucketbotManagerExample implements Updateable
 	/**Bucketbots should call requestNewTask when they are idle and have no tasks
 	 * @param r reference to the Bucketbot requesting a new task
 	 */
-	public void requestNewTask(Bucketbot r) {
+	public void requestNewTask(Bucketbot r) 
+	{
 		
 		alphabetsoup.framework.Map map = SimulationWorldSimpleExample.getSimulationWorld().map;
 		MersenneTwisterFast rand = SimulationWorldSimpleExample.rand;

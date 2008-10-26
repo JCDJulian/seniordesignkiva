@@ -65,13 +65,14 @@ public class LetterManagerExample implements Updateable {
 	public void update(double last_time, double cur_time) {
 		for(LetterStation s : SimulationWorldSimpleExample.getSimulationWorld().getLetterStations()) {
 			//give the station letters if it needs them
-			if(s.getAssignedLetters().size() < s.getCapacity()) {
-
+			if(s.getAssignedLetters().size() < s.getCapacity()) 
+			{
 				//create letters randomly based on the distribution 
 				//s.addLetter(SimulationWorldSimpleExample.simulationWorld.wordList.generateRandomLetter());
 				
 				//create letters based on need
-				if(requiredLetters.size() > 0) {
+				if(requiredLetters.size() > 0) 
+				{
 					Letter l = requiredLetters.remove(0);
 					//add the letter to the station
 					s.addBundle(l);
