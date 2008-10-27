@@ -69,7 +69,7 @@ The other packages in AlphabetSoup are as follows:
 	graph.  The WaypointGraph implements this functionality by maintaining a graph of Waypoint objects, and the
 	Bucketbots traverse this graph using a simple A* algorithm (where bucketbots simply stop and start at each
 	waypoint).  This helps the bucketbots navagate the buckets (so they don't always run into them), but the
-	simple pathfinding dramatically increases congestion.  Better pathfinding and better graphs should should
+	simple pathfinding dramatically increases congestion.  Better pathfinding and better graphs should
 	greatly better the performance.  SimulationWorldGraphExample produces the initial waypoint graph.
 -alphabetsoup.simulators.graphexample
 	This example packages is similar to graphexample, but uses a thoroughly greedy heuristics.

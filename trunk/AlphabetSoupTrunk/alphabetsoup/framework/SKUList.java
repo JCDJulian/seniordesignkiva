@@ -31,12 +31,13 @@ public class SKUList {
             Connection con = DriverManager.getConnection( database ,"","");
 
             Statement s = con.createStatement();
-			s.execute("select x_pos,y_pos from Bucket"); // select the data from the table
+			s.execute("select sku_name, remainings from SKU"); // select the data from the table
 			ResultSet rs = s.getResultSet(); // get any ResultSet that came from our query
-			if (rs != null) // if rs == null, then there is no ResultSet to view
-			while ( rs.next()) // this will step through our data row-by-row
+			if (rs != null) 
+			while ( rs.next()) 
 			{
-				System.out.println("x_pos: " + rs.getString(1) + " and y_pos: " + rs.getString(2));
+				SKU sku = new SKU(rs.getString(1), rs.getInt(2));
+				skuList.add(sku);
 			}
 			s.close(); // close the Statement to let the database know we're done with it
 			con.close();
@@ -45,6 +46,5 @@ public class SKUList {
         {
             System.out.println("Error: " + e);
         }
-        System.out.println("Hello");
 	}
 }

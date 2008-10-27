@@ -51,7 +51,7 @@ public class SimulationWorldMarketTaskAllocation extends SimulationWorld {
 	}
 	
 	public SimulationWorldMarketTaskAllocation() {
-		super("alphabetsoup.config");
+		super("kiva.config");
 		simulationWorldMarketTaskAllocation = this;
 		
 		float bucketbot_size = Float.parseFloat(params.getProperty("bucketbot_size"));

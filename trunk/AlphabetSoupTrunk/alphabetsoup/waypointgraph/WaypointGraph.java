@@ -23,7 +23,8 @@ public class WaypointGraph {
 	private HashMap<Bucket, Waypoint> buckets = new HashMap<Bucket, Waypoint>();
 	private Quadtree waypointQuadtree;
 	
-	public WaypointGraph(float map_width, float map_height) {
+	public WaypointGraph(float map_width, float map_height) 
+	{
 		 waypointQuadtree = new Quadtree(map_width, map_height);
 	}
 	

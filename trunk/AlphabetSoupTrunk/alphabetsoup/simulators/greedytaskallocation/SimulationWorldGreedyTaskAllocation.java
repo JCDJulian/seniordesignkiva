@@ -31,7 +31,7 @@ public class SimulationWorldGreedyTaskAllocation extends SimulationWorld {
 	}
 	
 	public SimulationWorldGreedyTaskAllocation() {
-		super("alphabetsoup.config");
+		super("kiva.config");
 		simulationWorldGraphExample = this;
 		
 		float bucketbot_size = Float.parseFloat(params.getProperty("bucketbot_size"));

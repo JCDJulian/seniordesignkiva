@@ -21,6 +21,7 @@ public class Quadtree {
 	 *  the QuadtreeNode is split into 4.
 	 */
 	public final static int divisionThreshold = 12;
+	
 	/**When fewer than combineThreshold objects are in the four child nodes of a QuadtreeNode,
 	 *  the 4 QuadtreeNodes are recombined.
 	 */
