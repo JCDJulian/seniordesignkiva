@@ -6,6 +6,7 @@ package alphabetsoup.framework;
 import java.io.FileInputStream;
 import java.lang.reflect.*;
 import java.util.*;
+import java.sql.*;
 
 /**
  * SimulationWorld is the base class of the AlphabetSoup simulation itself.
@@ -225,6 +226,37 @@ public class SimulationWorld
 		}
 	}
 
+	/**
+	 * this will be used when simulating order fulfillment
+	 */
+	public void initializeBucketContentsRandom()
+	{
+		try
+    	{
+            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+            String filename = "officedepot.mdb";
+            String database = "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb)};DBQ=";
+            database+= filename.trim() + ";DriverID=22;READONLY=true}"; // add on to the end
+            Connection con = DriverManager.getConnection( database ,"","");
+
+            Statement s = con.createStatement();
+			s.execute("select * from SKU_item"); // select the data from the table
+			ResultSet rs = s.getResultSet(); // get any ResultSet that came from our query
+			if (rs != null) 
+			while ( rs.next()) 
+			{
+				// INITIALIZE BUCKET CONTENTS HERE
+				
+			}
+			s.close(); // close the Statement to let the database know we're done with it
+			con.close();
+		}
+        catch (Exception e) 
+        {
+            System.out.println("Error: " + e);
+        }
+	}
+	
 	/**
 	 * @return Returns the letterStations.
 	 */
