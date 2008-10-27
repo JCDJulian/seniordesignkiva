@@ -191,7 +191,7 @@ public class SimulationWorld
 			// THIS IS WHERE EVERYTHING IS UPDATED. Updateable contains lists of objects
 			for(Updateable u : updateables) 
 			{
-				System.out.println("Upating " + u.getClass().getName());
+				//System.out.println("Upating " + u.getClass().getName());
 				u.update(currentTime, next_time);
 			}
 			

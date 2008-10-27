@@ -27,7 +27,8 @@ public class WordListBase implements WordList {
 	protected List<LetterColor> baseColors;
 	protected HashMap<Character, Float> letterProbabilities;
 	
-	public void resetStatistics() {
+	public void resetStatistics() 
+	{
 		completedWords = new ArrayList<Word>();
 	}
 

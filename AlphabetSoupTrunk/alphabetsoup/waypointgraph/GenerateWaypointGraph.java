@@ -26,7 +26,8 @@ public class GenerateWaypointGraph {
 		float bucketbot_radius = sw.bucketbots[0].getRadius();
 		
 		//spread letter stations evenly across on the left side
-		for(int i = 0; i < sw.letterStations.length; i++ ) {
+		for(int i = 0; i < sw.letterStations.length; i++ ) 
+		{
 			Circle c = (Circle) sw.letterStations[i];
 			c.setInitialPosition(Math.max(c.getRadius(), bucketbot_radius), (i + 1) * sw.map.getHeight() / (1 + sw.letterStations.length) );
 			circles.add(c);
@@ -34,7 +35,8 @@ public class GenerateWaypointGraph {
 		}
 		
 		//spread word stations evenly across on the right side
-		for(int i = 0; i < sw.wordStations.length; i++ ) {
+		for(int i = 0; i < sw.wordStations.length; i++ ) 
+		{
 			Circle c = (Circle) sw.wordStations[i];
 			c.setInitialPosition(sw.map.getWidth() - Math.max(c.getRadius(), bucketbot_radius), (i + 1) * sw.map.getHeight() / (1 + sw.wordStations.length) );
 			circles.add(c);
@@ -61,16 +63,16 @@ public class GenerateWaypointGraph {
 		
 		//create all the waypoint nodes for the grid
 		Waypoint[][] grid = new Waypoint[height_count][width_count];
-		for(int i = 0; i < height_count; i++) {
-			for(int j = 0; j < width_count; j++) {
+		for(int i = 0; i < height_count; i++) 
+		{
+			for(int j = 0; j < width_count; j++) 
+			{
 				grid[i][j] = new Waypoint(x_start + j*grid_link_width, y_start + i*grid_link_height, false);
 				waypointGraph.addWaypoint(grid[i][j]);
 				
 				//as long as not a first node, connect back to previous spots
-				if(j > 0)
-					grid[i][j].addBidirectionalPath(grid[i][j-1]);
-				if(i > 0)
-					grid[i][j].addBidirectionalPath(grid[i-1][j]);
+				if(j > 0) grid[i][j].addBidirectionalPath(grid[i][j-1]);
+				if(i > 0) grid[i][j].addBidirectionalPath(grid[i-1][j]);
 			}
 		}
 		

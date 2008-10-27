@@ -35,7 +35,8 @@ public class SimulationWorldMarketTaskAllocation extends SimulationWorld {
 		return simulationWorldMarketTaskAllocation;
 	}
 	
-	public void resetStatistics() {
+	public void resetStatistics() 
+	{
 		super.resetStatistics();
 		letterManager.setProfit(0.0);
 		wordManager.setProfit(0.0);
@@ -50,8 +51,9 @@ public class SimulationWorldMarketTaskAllocation extends SimulationWorld {
 			ba.setProfit(0.0);
 	}
 	
-	public SimulationWorldMarketTaskAllocation() {
-		super("alphabetsoup.config");
+	public SimulationWorldMarketTaskAllocation() 
+	{
+		super("kiva.config");
 		simulationWorldMarketTaskAllocation = this;
 		
 		float bucketbot_size = Float.parseFloat(params.getProperty("bucketbot_size"));
@@ -120,30 +122,31 @@ public class SimulationWorldMarketTaskAllocation extends SimulationWorld {
 		//generate waypoint graph
 		HashMap<Waypoint, Bucket> storage = GenerateWaypointGraph.initializeCompactRandomLayout(this, waypointGraph);
 		for(Waypoint w : storage.keySet())
-			if(storage.get(w) == null)
-				resourceManager.addNewValidBucketStorageLocation(w);
-			else
-				resourceManager.addNewUsedBucketStorageLocation(storage.get(w), w);
+		{
+			if(storage.get(w) == null) resourceManager.addNewValidBucketStorageLocation(w);
+			else resourceManager.addNewUsedBucketStorageLocation(storage.get(w), w);
+		}
 		
 		ComplexWordStationOffer.initializeWordStationTravelCosts(wordStations);
 		
 		economy = new Economy(word_completion_base_revenue, word_completion_letter_marginal_revenue);
 		
 		for(int i = 0; i < letterStations.length; i++)
+		{
 			((LetterStationAgent)letterStations[i]).setSituatedMarket(economy.addLetterToBucketMarket((Circle)letterStations[i]));
+		}
 		for(int i = 0; i < wordStations.length; i++)
+		{
 			((WordStationAgent)wordStations[i]).setSituatedMarket(economy.addLetterToWordMarket((Circle)wordStations[i]));
+		}
 		
 		economy.addStorageMarket(new Circle(map.getTolerance(), map.getWidth()/2,map.getHeight()/2));
 		
-		for(Waypoint w : resourceManager.usedBucketStorageLocations.values())
-			economy.addTransportationMarket(w);
-		for(Waypoint w : resourceManager.unusedBucketStorageLocations)
-			economy.addTransportationMarket(w);
+		for(Waypoint w : resourceManager.usedBucketStorageLocations.values()) economy.addTransportationMarket(w);
+		for(Waypoint w : resourceManager.unusedBucketStorageLocations) economy.addTransportationMarket(w);
 		
 		//generate words
-		wordList.generateWordsFromFile(params.getProperty("dictionary"), letterColors,
-				Integer.parseInt(params.getProperty("number_of_words")) );
+		wordList.generateWordsFromFile(params.getProperty("dictionary"), letterColors, Integer.parseInt(params.getProperty("number_of_words")) );
 		
 		//populate buckets
 		initializeBucketContentsRandom(Float.parseFloat(params.getProperty("initial_inventory")), bundle_size);

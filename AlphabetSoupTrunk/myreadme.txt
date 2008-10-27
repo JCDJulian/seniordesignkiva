@@ -18,4 +18,11 @@ instead of word stations.
 2. Set up configurations
 3. Go to mainLoop in RenderWindow.java in user interface
 4. Render every 6 seconds
-5. 
+
+
+GRAPH EXAMPLE README
+====================
+- 	Instantiate WaypointGraph(Map.width, Map,height) object
+	-	Instantiate Quadtree(Map.width, Map.height) which instantiate QuadtreeNode(null, 0, 0, width, height)
+	- 	
+- 

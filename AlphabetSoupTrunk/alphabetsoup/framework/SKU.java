@@ -15,17 +15,21 @@ public class SKU {
 	private String SKUName;
 	private int SKUID;
 	private char pickType;
+	private int remaining;
 	
-	public SKU(String SKUName, int SKUID, char pickType)
+	public SKU(String SKUName, int SKUID, char pickType, int remaining)
 	{
 		this.SKUName = SKUName;
 		this.SKUID = SKUID;
 		this.pickType = pickType;
+		this.remaining = remaining;
+		
 	}
 	
-	public SKU(String SKUName)
+	public SKU(String SKUName, int remaining)
 	{
 		this.SKUName = SKUName;
+		this.remaining = remaining;
 	}
 	
 	public String getItemName()
@@ -43,4 +47,8 @@ public class SKU {
 		return pickType;
 	}
 	
+	private int getRemaining()
+	{
+		return this.remaining;
+	}
 }

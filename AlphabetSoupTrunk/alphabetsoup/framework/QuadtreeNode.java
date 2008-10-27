@@ -29,12 +29,19 @@ public class QuadtreeNode {
 	 * @param x2_pos x coordinate of the bottom right corner of the bounding area.
 	 * @param y2_pos y coordinate of the bottom right corner of the bounding area.
 	 */
-	public QuadtreeNode(QuadtreeNode parent_node, float x1_pos, float y1_pos, float x2_pos, float y2_pos) {
-		x1 = x1_pos;	y1 = y1_pos;	x2 = x2_pos;	y2 = y2_pos;
-		children = new QuadtreeNode[4];
-		//adjust these initial capacity values if plan on having a larger flux of objects 
-		objects = new HashSet<Circle>(Quadtree.divisionThreshold + 4,
-				(float)(Quadtree.divisionThreshold+3) / (Quadtree.divisionThreshold+4));
+	public QuadtreeNode(QuadtreeNode parent_node, float x1_pos, float y1_pos, float x2_pos, float y2_pos) 
+	{
+		x1 = x1_pos;	
+		y1 = y1_pos;	
+		x2 = x2_pos;	
+		y2 = y2_pos; 
+		children = new QuadtreeNode[4]; // CREATE 4 CHILDREN
+		//adjust these initial capacity values if plan on having a larger flux of objects
+		System.out.println("Width and height to be divided " + x2_pos + " : " + y2_pos);
+		System.out.println("Initial capacity " + (Quadtree.divisionThreshold + 4));
+		System.out.println("LoadFactor " + (float)(Quadtree.divisionThreshold+3) / (Quadtree.divisionThreshold+4));
+		// INITIALIZE HashSet OF CIRCLE OBJECTS CONTAINING 
+		objects = new HashSet<Circle>(Quadtree.divisionThreshold + 4, (float)(Quadtree.divisionThreshold+3) / (Quadtree.divisionThreshold+4));
 	}
 	
 	
@@ -64,7 +71,8 @@ public class QuadtreeNode {
 		
 		//check to see if it's in any of the four quadrants; be leniant by a diameter incase it's at the edge
 		//see if in left half
-		if(c.getX() - diameter <= x1 + (x2 - x1)/2) {
+		if(c.getX() - diameter <= x1 + (x2 - x1)/2) 
+		{
 			//see if in top half
 			if(c.getY() - diameter <= y1 + (y2 - y1)/2)
 				if(!children[0].isValidMove(c, x_new, y_new))
@@ -77,7 +85,8 @@ public class QuadtreeNode {
 		}
 		
 		//see if in right half
-		if(c.getX() + diameter >= x1 + (x2 - x1)/2) {
+		if(c.getX() + diameter >= x1 + (x2 - x1)/2) 
+		{
 			//see if in top half
 			if(c.getY() - diameter <= y1 + (y2 - y1)/2)
 				if(!children[1].isValidMove(c, x_new, y_new))
@@ -94,7 +103,8 @@ public class QuadtreeNode {
 	/**Recursively adds specified Circle object from tree based on position. 
 	 * @param c Circle object to remove.
 	 */
-	public void addCircleObject(Circle c) {
+	public void addCircleObject(Circle c) 
+	{
 		//if it's bigger, then it's the largest circle
 		if(largestCircle == null || c.getRadius() > largestCircle.getRadius())
 			largestCircle = c;
