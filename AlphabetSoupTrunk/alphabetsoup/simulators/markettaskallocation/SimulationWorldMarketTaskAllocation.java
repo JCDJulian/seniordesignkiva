@@ -4,7 +4,6 @@
 package alphabetsoup.simulators.markettaskallocation;
 
 import java.util.*;
-
 import alphabetsoup.base.*;
 import alphabetsoup.framework.*;
 import alphabetsoup.userinterface.*;
@@ -50,7 +49,8 @@ public class SimulationWorldMarketTaskAllocation extends SimulationWorld {
 			ba.setProfit(0.0);
 	}
 	
-	public SimulationWorldMarketTaskAllocation() {
+	public SimulationWorldMarketTaskAllocation() 
+	{
 		super("kiva.config");
 		simulationWorldMarketTaskAllocation = this;
 		
