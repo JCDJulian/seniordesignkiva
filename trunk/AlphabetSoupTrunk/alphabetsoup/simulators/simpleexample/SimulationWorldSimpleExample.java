@@ -285,7 +285,6 @@ public class SimulationWorldSimpleExample extends SimulationWorld
         {
             System.out.println("Error: " + e);
         }
-        System.out.println("Hello");
 	}
 	*/
 	

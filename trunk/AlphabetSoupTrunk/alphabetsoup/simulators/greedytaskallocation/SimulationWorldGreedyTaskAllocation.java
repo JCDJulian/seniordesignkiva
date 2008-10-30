@@ -100,19 +100,25 @@ public class SimulationWorldGreedyTaskAllocation extends SimulationWorld {
 		
 		//populate update list
 		updateables = new ArrayList<Updateable>();
-		for(Bucketbot r : bucketbots)
-			updateables.add((Updateable)r);
-		for(BucketbotAgent a : bucketbotagents)
-			updateables.add((Updateable)a);
+		for(Bucketbot r : bucketbots) updateables.add((Updateable)r);
+		for(BucketbotAgent a : bucketbotagents) updateables.add((Updateable)a);
 		updateables.add((Updateable)map);
 		updateables.add((Updateable)bucketbotManager);
 		updateables.add((Updateable)wordManager);
 		updateables.add((Updateable)letterManager);
-		for(WordStation s : wordStations)
-			updateables.add((Updateable)s);
-		for(LetterStation s : letterStations)
-			updateables.add((Updateable)s);
+		for(WordStation s : wordStations) updateables.add((Updateable)s);
+		for(LetterStation s : letterStations) updateables.add((Updateable)s);
 		
+		/*
+		int counter = 0;
+		for(Updateable obj : updateables)
+		{
+			counter++;
+			System.out.println("Class name is " + obj.getClass().getName());
+		}
+		System.out.println("Number of updateable is " + counter);
+		System.exit(0);
+		*/
 		//finish adding things to be rendered
 		if(usingGUI) {
 			RenderWindow.addAdditionalDetailRender(new WordListRender((WordListBase)wordList));
