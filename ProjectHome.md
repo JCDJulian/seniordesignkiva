@@ -1,0 +1,1 @@
+The project is a senior design project that involves using Kiva system to expand the warehouse.
